@@ -44,13 +44,24 @@ const getRandomDate = () => {
   return targetDate;
 };
 
+const generateRepeatingDays = () => {
+  return Object.assign({}, DefaultRepeatingDays, {
+    'mo': Math.random() > 0.5
+  });
+};
+
+const generateTags = (tags) => {
+  return tags
+    .filter(() => Math.random() > 0.5)
+    .slice(0, 3);
+};
+
 const generateTask = () => {
   const dueDate = Math.random() > 0.5 ? null : getRandomDate();
 
   return {
     description: getRandomArrayItem(DescriptionItems),
+    dueDate,
     color: getRandomArrayItem(Colors)
   };
 };
-
-console.log(Colors)
