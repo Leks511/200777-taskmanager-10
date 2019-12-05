@@ -67,3 +67,32 @@ export const createTaskTemplate = () => {
     </article>`
   );
 };
+
+import {MONTH_NAMES} from '../const';
+import {formatTime} from '../util';
+
+const createHashtagsMarkup = (hashtags) => {
+  return hashtags
+    .map((hashtag) => {
+      return (`
+        <span class="card__hashtag-inner">
+          <span class="card__hashtag-name">
+            #${hashtag}
+          </span>
+        </span>
+      `);
+    })
+    .join(`\n`);
+};
+
+export const createTaskTemplate = (task) => {
+  const {description, tags, dueDate, color, repeatingDays} = task;
+
+  const isExpired = dueDate instanceof Date && dueDate < Date.now();
+  const isDateShowing = !!dueDate;
+
+  const date = isDateShowing ? `${dueDate.getDate()} ${MONTH_NAMES[dueDate.getMonth()]}` : ``;
+  const time = isDateShowing ? formatTime(dueDate) : ``;
+
+  const hashtags = createHashtagsMarkup(Array.from(tags));
+}
