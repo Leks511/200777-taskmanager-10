@@ -23,6 +23,52 @@ const createColorsMarkup = (colors, currentColor) => {
     .join(`\n`);
 };
 
+const createRepeatingDaysMarkup = (days, repeatingDays) => {
+  return days
+    .map((day) => {
+      const isChecked = repeatingDays[day];
+
+      return (`
+        <input
+          class="visually-hidden card__repeat-day-input"
+          type="checkbox"
+          id="repeat-${day}-4"
+          name="repeat"
+          value="${day}"
+          ${isChecked ? `checked` : ``}
+        />
+        <label class="card__repeat-day" for="repeat-${day}-4"
+          >${day}</label
+        >
+      `);
+
+    })
+    .join(`\n`);
+};
+
+const createHashtags = (tags) => {
+  return Array.from(tags)
+    .map((tag) => {
+      return (`
+        <span class="card__hashtag-inner">
+          <input
+            type="hidden"
+            name="hashtag"
+            value="${tag}"
+            class="card__hashtag-hidden-input"
+          />
+          <p class="card__hashtag-name">
+            #${tag}
+          </p>
+          <button type="button" class="card__hashtag-delete">
+            delete
+          </button>
+        </span>
+      `);
+    })
+    .join(`\n`);
+};
+
 export const createTaskEditTemplate = (task) => {
   const {description, tags, dueDate, color, repeatingDays} = task;
 
@@ -40,8 +86,8 @@ export const createTaskEditTemplate = (task) => {
   const colorsMarkup = createColorsMarkup(COLORS, color);
   const repeatingDaysMarkup = createRepeatingDaysMarkup(DAYS, repeatingDays);
 
-  return (
-    `<article class="card card--edit card--${color} ${repeatClass} ${deadlineClass}">
+  return (`
+    <article class="card card--edit card--${color} ${repeatClass} ${deadlineClass}">
       <form class="card__form" method="get">
         <div class="card__inner">
           <div class="card__color-bar">
@@ -126,6 +172,6 @@ export const createTaskEditTemplate = (task) => {
           </div>
         </div>
       </form>
-    </article>`
-  );
+    </article>
+  `);
 };
