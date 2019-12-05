@@ -1,4 +1,4 @@
-import {Colors} from '../const.js';
+import {COLORS} from '../const.js';
 
 const DescriptionItems = [
   `Изучить теорию`,
@@ -62,6 +62,18 @@ const generateTask = () => {
   return {
     description: getRandomArrayItem(DescriptionItems),
     dueDate,
-    color: getRandomArrayItem(Colors)
+    repeatingDays: dueDate ? DefaultRepeatingDays : generateRepeatingDays(),
+    tags: new Set(generateTags(Tags)),
+    color: getRandomArrayItem(COLORS),
+    isFavorite: Math.random() > 0.5,
+    isArchive: Math.random() > 0.5
   };
 };
+
+const generateTasks = (count) => {
+  return new Array(count)
+    .fill(``)
+    .map(generateTask);
+};
+
+export {generateTask, generateTasks};
