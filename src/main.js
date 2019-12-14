@@ -7,11 +7,9 @@ import {createTaskTemplate} from './components/task.js';
 import {generateTasks} from './mock/task.js';
 import {generateFilters} from './mock/filter';
 
-const TASK_COUNT = 22;
+import { render, RenderPosition } from './util';
 
-const render = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
+const TASK_COUNT = 22;
 
 const siteMainElement = document.querySelector(`.main`);
 const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
