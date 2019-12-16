@@ -4,8 +4,8 @@ import {createElement, formatTime} from '../util';
 const createColorsMarkup = (colors, currentColor) => {
   return colors
     .map((color) => {
-      return (`
-        <input
+      return (
+        `<input
           type="radio"
           id="color-${color}-4"
           class="card__color-input card__color-input--${color} visually-hidden"
@@ -17,8 +17,8 @@ const createColorsMarkup = (colors, currentColor) => {
           for="color-${color}-4"
           class="card__color card__color--${color}"
           >${color}</label
-        >
-      `);
+        >`
+      );
     })
     .join(`\n`);
 };
@@ -28,8 +28,8 @@ const createRepeatingDaysMarkup = (days, repeatingDays) => {
     .map((day) => {
       const isChecked = repeatingDays[day];
 
-      return (`
-        <input
+      return (
+        `<input
           class="visually-hidden card__repeat-day-input"
           type="checkbox"
           id="repeat-${day}-4"
@@ -39,9 +39,7 @@ const createRepeatingDaysMarkup = (days, repeatingDays) => {
         />
         <label class="card__repeat-day" for="repeat-${day}-4"
           >${day}</label
-        >
-      `);
-
+        >`);
     })
     .join(`\n`);
 };
@@ -49,8 +47,8 @@ const createRepeatingDaysMarkup = (days, repeatingDays) => {
 const createHashtags = (tags) => {
   return Array.from(tags)
     .map((tag) => {
-      return (`
-        <span class="card__hashtag-inner">
+      return (
+        `<span class="card__hashtag-inner">
           <input
             type="hidden"
             name="hashtag"
@@ -63,8 +61,8 @@ const createHashtags = (tags) => {
           <button type="button" class="card__hashtag-delete">
             delete
           </button>
-        </span>
-      `);
+        </span>`
+      );
     })
     .join(`\n`);
 };

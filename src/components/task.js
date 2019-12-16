@@ -4,13 +4,13 @@ import {formatTime, createElement} from '../util';
 const createHashtagsMarkup = (hashtags) => {
   return hashtags
     .map((hashtag) => {
-      return (`
-        <span class="card__hashtag-inner">
+      return (
+        `<span class="card__hashtag-inner">
           <span class="card__hashtag-name">
             #${hashtag}
           </span>
-        </span>
-      `);
+        </span>`
+      );
     })
     .join(`\n`);
 };
@@ -28,8 +28,8 @@ const createTaskTemplate = (task) => {
   const repeatClass = Object.values(repeatingDays).some(Boolean) ? `card--repeat` : ``;
   const deadlineClass = isExpired ? `card--deadline` : ``;
 
-  return (`
-    <article class="card card--${color} ${repeatClass} ${deadlineClass}">
+  return (
+    `<article class="card card--${color} ${repeatClass} ${deadlineClass}">
       <div class="card__form">
         <div class="card__inner">
           <div class="card__control">
@@ -77,8 +77,8 @@ const createTaskTemplate = (task) => {
           </div>
         </div>
       </div>
-    </article>
-  `);
+    </article>`
+  );
 };
 
 export default class Task {

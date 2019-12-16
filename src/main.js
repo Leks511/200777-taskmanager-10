@@ -16,15 +16,16 @@ const renderTask = (task) => {
   const taskComponent = new TaskComponent(task);
   const taskEditComponent = new TaskEditComponent(task);
 
-  // const editButton = taskComponent.getElement().querySelector(`.card__btn--edit`);
-  // editButton.addEventListener(`click`, () => {
-  //   taskListElement.replaceChild(taskEditComponent.getElement(), taskComponent.getElement());
-  // });
+  const editButton = taskComponent.getElement().querySelector(`.card__btn--edit`);
 
-  // const editForm = taskEditComponent.getElement().querySelector(`form`);
-  // editForm.addEventListener(`submit`, () => {
-  //   taskListElement.replaceChild(taskComponent.getElement(), taskEditComponent.getElement());
-  // });
+  editButton.addEventListener(`click`, () => {
+    taskListElement.replaceChild(taskEditComponent.getElement(), taskComponent.getElement());
+  });
+
+  const editForm = taskEditComponent.getElement().querySelector(`form`);
+  editForm.addEventListener(`submit`, () => {
+    taskListElement.replaceChild(taskComponent.getElement(), taskEditComponent.getElement());
+  });
 
   render(taskListElement, taskComponent.getElement(), RenderPosition.BEFOREEND);
 };
@@ -43,8 +44,6 @@ render(siteMainElement, boardComponent.getElement(), RenderPosition.BEFOREEND);
 const taskListElement = boardComponent.getElement().querySelector(`.board__tasks`);
 const tasks = generateTasks(TASK_COUNT);
 
-render(taskListElement, new TaskEditComponent(tasks[0]).getElement(), RenderPosition.BEFOREEND);
-
 let showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
 tasks.slice(0, showingTasksCount)
   .forEach((task) => {
@@ -52,7 +51,7 @@ tasks.slice(0, showingTasksCount)
   });
 
 const loadMoreButtonComponent = new LoadMoreButtonComponent();
-render(boardComponent, new LoadMoreButtonComponent().getElement(), RenderPosition.BEFOREEND);
+render(boardComponent.getElement(), new LoadMoreButtonComponent().getElement(), RenderPosition.BEFOREEND);
 
 loadMoreButtonComponent.getElement().addEventListener(`click`, () => {
   const prevTasksCount = showingTasksCount;

@@ -11,8 +11,8 @@ const createBoardTemplate = () => {
       </div>
 
       <div class="board__tasks"></div>
-    </section>`
-  );
+    </section>
+  `);
 };
 
 export default class Board {
