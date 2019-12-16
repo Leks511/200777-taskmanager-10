@@ -51,18 +51,18 @@ tasks.slice(0, showingTasksCount)
     renderTask(task);
   });
 
-// const loadMoreButtonComponent = new LoadMoreButtonComponent();
-// render(boardComponent, new LoadMoreButtonComponent().getElement(), RenderPosition.BEFOREEND);
+const loadMoreButtonComponent = new LoadMoreButtonComponent();
+render(boardComponent, new LoadMoreButtonComponent().getElement(), RenderPosition.BEFOREEND);
 
-// loadMoreButtonComponent.getElement().addEventListener(`click`, () => {
-//   const prevTasksCount = showingTasksCount;
-//   showingTasksCount = showingTasksCount + SHOWING_TASKS_COUNT_BY_BUTTON;
+loadMoreButtonComponent.getElement().addEventListener(`click`, () => {
+  const prevTasksCount = showingTasksCount;
+  showingTasksCount = showingTasksCount + SHOWING_TASKS_COUNT_BY_BUTTON;
 
-//   tasks.slice(prevTasksCount, showingTasksCount)
-//     .forEach((task) => renderTask(task));
+  tasks.slice(prevTasksCount, showingTasksCount)
+    .forEach((task) => renderTask(task));
 
-//   if (showingTasksCount >= tasks.length) {
-//     loadMoreButtonComponent.getElement().remove();
-//     loadMoreButtonComponent.removeElement();
-//   }
-// });
+  if (showingTasksCount >= tasks.length) {
+    loadMoreButtonComponent.getElement().remove();
+    loadMoreButtonComponent.removeElement();
+  }
+});

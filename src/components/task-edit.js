@@ -1,5 +1,5 @@
-import {COLORS, DAYS, MONTH_NAMES} from '../const.js';
-import {formatTime, createElement} from '../util.js';
+import {COLORS, DAYS, MONTH_NAMES} from '../const';
+import {createElement, formatTime} from '../util';
 
 const createColorsMarkup = (colors, currentColor) => {
   return colors
@@ -86,8 +86,8 @@ const createTaskEditTemplate = (task) => {
   const colorsMarkup = createColorsMarkup(COLORS, color);
   const repeatingDaysMarkup = createRepeatingDaysMarkup(DAYS, repeatingDays);
 
-  return (`
-    <article class="card card--edit card--${color} ${repeatClass} ${deadlineClass}">
+  return (
+    `<article class="card card--edit card--${color} ${repeatClass} ${deadlineClass}">
       <form class="card__form" method="get">
         <div class="card__inner">
           <div class="card__color-bar">
@@ -172,14 +172,14 @@ const createTaskEditTemplate = (task) => {
           </div>
         </div>
       </form>
-    </article>
-  `);
+    </article>`
+  );
 };
 
 export default class TaskEdit {
   constructor(task) {
-    this._element = null;
     this._task = task;
+    this._element = null;
   }
 
   getTemplate() {
