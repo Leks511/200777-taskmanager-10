@@ -1,23 +1,23 @@
 import {COLORS, DAYS, MONTH_NAMES} from '../const.js';
-import {formatTime} from '../util.js';
+import {formatTime, createElement} from '../util.js';
 
 const createColorsMarkup = (colors, currentColor) => {
   return colors
     .map((color) => {
       return (`
-      <input
-        type="radio"
-        id="color-${color}-4"
-        class="card__color-input card__color-input--${color} visually-hidden"
-        name="color"
-        value="${color}"
-        ${currentColor === color ? `checked` : ``}
-      />
-      <label
-        for="color-${color}-4"
-        class="card__color card__color--${color}"
-        >${color}</label
-      >
+        <input
+          type="radio"
+          id="color-${color}-4"
+          class="card__color-input card__color-input--${color} visually-hidden"
+          name="color"
+          value="${color}"
+          ${currentColor === color ? `checked` : ``}
+        />
+        <label
+          for="color-${color}-4"
+          class="card__color card__color--${color}"
+          >${color}</label
+        >
       `);
     })
     .join(`\n`);
@@ -69,7 +69,7 @@ const createHashtags = (tags) => {
     .join(`\n`);
 };
 
-export const createTaskEditTemplate = (task) => {
+const createTaskEditTemplate = (task) => {
   const {description, tags, dueDate, color, repeatingDays} = task;
 
   const isExpired = dueDate instanceof Date && dueDate < Date.now();
@@ -175,3 +175,26 @@ export const createTaskEditTemplate = (task) => {
     </article>
   `);
 };
+
+export default class TaskEdit {
+  constructor(task) {
+    this._element = null;
+    this._task = task;
+  }
+
+  getTemplate() {
+    return createTaskEditTemplate(this._task);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
