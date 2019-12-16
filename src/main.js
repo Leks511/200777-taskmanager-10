@@ -16,15 +16,15 @@ const renderTask = (task) => {
   const taskComponent = new TaskComponent(task);
   const taskEditComponent = new TaskEditComponent(task);
 
-  const editButton = taskComponent.getElement().querySelector(`.card__btn--edit`);
-  editButton.addEventListener(`click`, () => {
-    taskListElement.replaceChild(taskEditComponent.getElement(), taskComponent.getElement());
-  });
+  // const editButton = taskComponent.getElement().querySelector(`.card__btn--edit`);
+  // editButton.addEventListener(`click`, () => {
+  //   taskListElement.replaceChild(taskEditComponent.getElement(), taskComponent.getElement());
+  // });
 
-  const editForm = taskEditComponent.getElement().querySelector(`form`);
-  editForm.addEventListener(`submit`, () => {
-    taskListElement.replaceChild(taskComponent.getElement(), taskEditComponent.getElement());
-  });
+  // const editForm = taskEditComponent.getElement().querySelector(`form`);
+  // editForm.addEventListener(`submit`, () => {
+  //   taskListElement.replaceChild(taskComponent.getElement(), taskEditComponent.getElement());
+  // });
 
   render(taskListElement, taskComponent.getElement(), RenderPosition.BEFOREEND);
 };
@@ -51,18 +51,18 @@ tasks.slice(0, showingTasksCount)
     renderTask(task);
   });
 
-const loadMoreButtonComponent = new LoadMoreButtonComponent();
-render(boardComponent, new LoadMoreButtonComponent().getElement(), `beforeend`);
+// const loadMoreButtonComponent = new LoadMoreButtonComponent();
+// render(boardComponent, new LoadMoreButtonComponent().getElement(), RenderPosition.BEFOREEND);
 
-loadMoreButtonComponent.getElement().addEventListener(`click`, () => {
-  const prevTasksCount = showingTasksCount;
-  showingTasksCount = showingTasksCount + SHOWING_TASKS_COUNT_BY_BUTTON;
+// loadMoreButtonComponent.getElement().addEventListener(`click`, () => {
+//   const prevTasksCount = showingTasksCount;
+//   showingTasksCount = showingTasksCount + SHOWING_TASKS_COUNT_BY_BUTTON;
 
-  tasks.slice(prevTasksCount, showingTasksCount)
-    .forEach((task) => renderTask(task));
+//   tasks.slice(prevTasksCount, showingTasksCount)
+//     .forEach((task) => renderTask(task));
 
-  if (showingTasksCount >= tasks.length) {
-    loadMoreButtonComponent.getElement().remove();
-    loadMoreButtonComponent.removeElement();
-  }
-});
+//   if (showingTasksCount >= tasks.length) {
+//     loadMoreButtonComponent.getElement().remove();
+//     loadMoreButtonComponent.removeElement();
+//   }
+// });
