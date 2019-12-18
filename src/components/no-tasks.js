@@ -1,16 +1,16 @@
-import {createElement} from "../util";
+import {createElement} from '../util';
 
-const createTasksTemplate = () => {
-  return `<div class="board__tasks"></div>`;
+const createNoTasksTemplate = () => {
+  return `<p class="board__no-tasks">Click «ADD NEW TASK» in menu to create your first task</p>`;
 };
 
-export default class Tasks {
+export default class NoTasks {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createTasksTemplate();
+    return createNoTasksTemplate();
   }
 
   getElement() {

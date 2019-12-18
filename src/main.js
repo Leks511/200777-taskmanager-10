@@ -1,10 +1,13 @@
-import BoardComponent from './components/board.js';
-import FilterComponent from './components/filter.js';
-import LoadMoreButtonComponent from './components/load-more-button.js';
-import SiteMenuComponent from './components/site-menu.js';
-import TaskEditComponent from './components/task-edit.js';
-import TaskComponent from './components/task.js';
-import {generateTasks} from './mock/task.js';
+import BoardComponent from './components/board';
+import FilterComponent from './components/filter';
+import SiteMenuComponent from './components/site-menu';
+import SortComponent from './components/sort';
+import TaskEditComponent from './components/task-edit';
+import TaskComponent from './components/task';
+import TasksComponent from './components/tasks';
+import LoadMoreButtonComponent from './components/load-more-button';
+import NoTasksComponent from './components/no-tasks';
+import {generateTasks} from './mock/task';
 import {generateFilters} from './mock/filter';
 import {render, RenderPosition} from './util';
 
