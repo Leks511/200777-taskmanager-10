@@ -13,7 +13,14 @@ const SHOWING_TASKS_COUNT_ON_START = 8;
 const TASK_COUNT = 22;
 const ESC_CODE = 27;
 
+// На каждый таск добавим функционал
 const renderTask = (task) => {
+  const taskComponent = new TaskComponent(task);
+  const taskEditComponent = new TaskEditComponent(task);
+
+  const editButton = taskComponent.getElement().querySelector(`.card__btn--edit`);
+  const editForm = taskEditComponent.getElement().querySelector(`form`);
+
   const onEscKeyDown = (evt) => {
     if (evt.keyCode === ESC_CODE) {
       replaceEditToTask();
@@ -29,16 +36,13 @@ const renderTask = (task) => {
     taskListElement.replaceChild(taskEditComponent.getElement(), taskComponent.getElement());
   };
 
-  const taskComponent = new TaskComponent(task);
-  const taskEditComponent = new TaskEditComponent(task);
-
-  const editButton = taskComponent.getElement().querySelector(`.card__btn--edit`);
+  // По клику на кнопку Edit заменим карточку на форму и добавим прослушку ESC
   editButton.addEventListener(`click`, () => {
     replaceTaskToEdit();
     document.addEventListener(`keydown`, onEscKeyDown);
   });
 
-  const editForm = taskEditComponent.getElement().querySelector(`form`);
+  // Прослушаем событие отправки и заменим таск-едит на таск
   editForm.addEventListener(`submit`, replaceEditToTask);
 
   render(taskListElement, taskComponent.getElement(), RenderPosition.BEFOREEND);
