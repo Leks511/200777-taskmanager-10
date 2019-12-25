@@ -41,6 +41,7 @@ const renderTask = (taskListElement, task) => {
     taskListElement.replaceChild(taskEditComponent.getElement(), taskComponent.getElement());
   };
 
+
   // По клику на кнопку Edit заменим таск на таск-едит и добавим прослушку ESC
   editButton.addEventListener(`click`, () => {
     replaceTaskToEdit();
@@ -53,9 +54,52 @@ const renderTask = (taskListElement, task) => {
   render(taskListElement, taskComponent.getElement(), RenderPosition.BEFOREEND);
 };
 
-const siteMainElement = document.querySelector(`.main`);
+// Функция рендеринга элементов на доску
+const renderBoard = (boardComponent, tasks) => {
+  // Проверяем, отсутствие тасков
+  const isAllTasksArchived = tasks.every((task) => task.isArchive);
+
+  // Нет тасков - покажем сообщение, есть - добавим интерфейс и покажем таски
+  if (isAllTasksArchived) {
+    render(boardComponent.getElement(), new NoTasksComponent().getElement(), RenderPosition.BEFOREEND);
+  } else {
+    // Рендерим интерфейсную часть и контейнер для тасков
+    render(boardComponent.getElement(), new SortComponent().getElement(), RenderPosition.BEFOREEND);
+    render(boardComponent.getElement(), new TasksComponent().getElement(), RenderPosition.BEFOREEND);
+
+    // Находим контейнер тасков
+    const taskListElement = boardComponent.getElement().querySelector(`.board__tasks`);
+
+    // Добавляем сразу туда определённое количество
+    let showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
+    tasks.slice(0, showingTasksCount)
+      .forEach((task) => {
+        renderTask(taskListElement, task);
+      });
+
+    // Отображаем кнопку Load More
+    const loadMoreButtonComponent = new LoadMoreButtonComponent();
+    render(boardComponent.getElement(), loadMoreButtonComponent.getElement(), RenderPosition.BEFOREEND);
+
+    // По нажатию на неё добавляем ещё таски
+    loadMoreButtonComponent.getElement().addEventListener(`click`, () => {
+      const prevTasksCount = showingTasksCount;
+      showingTasksCount = showingTasksCount + SHOWING_TASKS_COUNT_BY_BUTTON;
+
+      tasks.slice(prevTasksCount, showingTasksCount)
+        .forEach((task) => renderTask(taskListElement, task));
+
+      // Если кончились таски, то удаляем кнопку
+      if (showingTasksCount >= tasks.length) {
+        loadMoreButtonComponent.getElement().remove();
+        loadMoreButtonComponent.removeElement();
+      }
+    });
+  }
+};
 
 // Рендеринг шапки
+const siteMainElement = document.querySelector(`.main`);
 const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
 render(siteHeaderElement, new SiteMenuComponent().getElement(), RenderPosition.BEFOREEND);
 
@@ -70,44 +114,4 @@ render(siteMainElement, boardComponent.getElement(), RenderPosition.BEFOREEND);
 // Получаем данные тасков
 const tasks = generateTasks(TASK_COUNT);
 
-// Проверяем, отсутствие тасков
-const isAllTasksArchived = tasks.every((task) => task.isArchive);
-// Нет тасков - покажем сообщение, есть - добавим интерфейс и покажем таски
-
-
-if (isAllTasksArchived) {
-  render(boardComponent.getElement(), new NoTasksComponent().getElement(), RenderPosition.BEFOREEND);
-} else {
-  // Рендерим интерфейсную часть и контейнер для тасков
-  render(boardComponent.getElement(), new SortComponent().getElement(), RenderPosition.BEFOREEND);
-  render(boardComponent.getElement(), new TasksComponent().getElement(), RenderPosition.BEFOREEND);
-
-  // Находим контейнер тасков
-  const taskListElement = boardComponent.getElement().querySelector(`.board__tasks`);
-
-  // Добавляем сразу туда определённое количество
-  let showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
-  tasks.slice(0, showingTasksCount)
-    .forEach((task) => {
-      renderTask(taskListElement, task);
-    });
-
-  // Отображаем кнопку Load More
-  const loadMoreButtonComponent = new LoadMoreButtonComponent();
-  render(boardComponent.getElement(), loadMoreButtonComponent.getElement(), RenderPosition.BEFOREEND);
-
-  // По нажатию на неё добавляем ещё таски
-  loadMoreButtonComponent.getElement().addEventListener(`click`, () => {
-    const prevTasksCount = showingTasksCount;
-    showingTasksCount = showingTasksCount + SHOWING_TASKS_COUNT_BY_BUTTON;
-
-    tasks.slice(prevTasksCount, showingTasksCount)
-      .forEach((task) => renderTask(taskListElement, task));
-
-    // Если кончились таски, то удаляем кнопку
-    if (showingTasksCount >= tasks.length) {
-      loadMoreButtonComponent.getElement().remove();
-      loadMoreButtonComponent.removeElement();
-    }
-  });
-}
+renderBoard(boardComponent, tasks);
