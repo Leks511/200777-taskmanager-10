@@ -1,5 +1,5 @@
 import {MONTH_NAMES} from '../const';
-import {formatTime} from '../util';
+import {formatTime} from '../utils/common';
 import AbstractComponent from './abstract-component';
 
 const createHashtagsMarkup = (hashtags) => {
@@ -91,5 +91,10 @@ export default class Task extends AbstractComponent {
 
   getTemplate() {
     return createTaskTemplate(this._task);
+  }
+
+  setEditButtonClickHandler(handler) {
+    this.getElement().querySelector(`.card__btn--edit`)
+      .addEventListener(`click`, handler);
   }
 }

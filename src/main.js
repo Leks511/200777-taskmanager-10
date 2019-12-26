@@ -9,7 +9,7 @@ import LoadMoreButtonComponent from './components/load-more-button';
 import NoTasksComponent from './components/no-tasks';
 import {generateTasks} from './mock/task';
 import {generateFilters} from './mock/filter';
-import {render, RenderPosition} from './util';
+import {render, replace, remove, RenderPosition} from './utils/render';
 
 const SHOWING_TASKS_COUNT_BY_BUTTON = 8;
 const SHOWING_TASKS_COUNT_ON_START = 8;
@@ -21,9 +21,6 @@ const renderTask = (taskListElement, task) => {
   const taskComponent = new TaskComponent(task);
   const taskEditComponent = new TaskEditComponent(task);
 
-  const editButton = taskComponent.getElement().querySelector(`.card__btn--edit`);
-  const editForm = taskEditComponent.getElement().querySelector(`form`);
-
   const onEscKeyDown = (evt) => {
     if (evt.keyCode === ESC_CODE) {
       replaceEditToTask();
@@ -32,26 +29,26 @@ const renderTask = (taskListElement, task) => {
   };
 
 
-  // Вспомогательные функции замены
+  // Вспомогательные функции замены карточки и формы
   const replaceEditToTask = () => {
-    taskListElement.replaceChild(taskComponent.getElement(), taskEditComponent.getElement());
+    replace(taskComponent, taskEditComponent);
   };
 
   const replaceTaskToEdit = () => {
-    taskListElement.replaceChild(taskEditComponent.getElement(), taskComponent.getElement());
+    replace(taskEditComponent, taskComponent);
   };
 
 
-  // По клику на кнопку Edit заменим таск на таск-едит и добавим прослушку ESC
-  editButton.addEventListener(`click`, () => {
+  // По клику на кнопку Edit заменим таск на форму и добавим прослушку ESC
+  taskComponent.setEditButtonClickHandler(() => {
     replaceTaskToEdit();
     document.addEventListener(`keydown`, onEscKeyDown);
   });
 
-  // Прослушаем событие отправки и заменим таск-едит на таск
-  editForm.addEventListener(`submit`, replaceEditToTask);
+  // Прослушаем событие отправки и заменим форму на таск
+  taskEditComponent.setSubmitHandler(replaceEditToTask);
 
-  render(taskListElement, taskComponent.getElement(), RenderPosition.BEFOREEND);
+  render(taskListElement, taskComponent, RenderPosition.BEFOREEND);
 };
 
 // Функция рендеринга элементов на доску
@@ -61,11 +58,11 @@ const renderBoard = (boardComponent, tasks) => {
 
   // Нет тасков - покажем сообщение, есть - добавим интерфейс и покажем таски
   if (isAllTasksArchived) {
-    render(boardComponent.getElement(), new NoTasksComponent().getElement(), RenderPosition.BEFOREEND);
+    render(boardComponent.getElement(), new NoTasksComponent(), RenderPosition.BEFOREEND);
   } else {
     // Рендерим интерфейсную часть и контейнер для тасков
-    render(boardComponent.getElement(), new SortComponent().getElement(), RenderPosition.BEFOREEND);
-    render(boardComponent.getElement(), new TasksComponent().getElement(), RenderPosition.BEFOREEND);
+    render(boardComponent.getElement(), new SortComponent(), RenderPosition.BEFOREEND);
+    render(boardComponent.getElement(), new TasksComponent(), RenderPosition.BEFOREEND);
 
     // Находим контейнер тасков
     const taskListElement = boardComponent.getElement().querySelector(`.board__tasks`);
@@ -79,10 +76,10 @@ const renderBoard = (boardComponent, tasks) => {
 
     // Отображаем кнопку Load More
     const loadMoreButtonComponent = new LoadMoreButtonComponent();
-    render(boardComponent.getElement(), loadMoreButtonComponent.getElement(), RenderPosition.BEFOREEND);
+    render(boardComponent.getElement(), loadMoreButtonComponent, RenderPosition.BEFOREEND);
 
     // По нажатию на неё добавляем ещё таски
-    loadMoreButtonComponent.getElement().addEventListener(`click`, () => {
+    loadMoreButtonComponent.setClickHandler(() => {
       const prevTasksCount = showingTasksCount;
       showingTasksCount = showingTasksCount + SHOWING_TASKS_COUNT_BY_BUTTON;
 
@@ -91,8 +88,7 @@ const renderBoard = (boardComponent, tasks) => {
 
       // Если кончились таски, то удаляем кнопку
       if (showingTasksCount >= tasks.length) {
-        loadMoreButtonComponent.getElement().remove();
-        loadMoreButtonComponent.removeElement();
+        remove(loadMoreButtonComponent);
       }
     });
   }
@@ -101,15 +97,15 @@ const renderBoard = (boardComponent, tasks) => {
 // Рендеринг шапки
 const siteMainElement = document.querySelector(`.main`);
 const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
-render(siteHeaderElement, new SiteMenuComponent().getElement(), RenderPosition.BEFOREEND);
+render(siteHeaderElement, new SiteMenuComponent(), RenderPosition.BEFOREEND);
 
 // Рендеринг фильтров
 const filters = generateFilters();
-render(siteMainElement, new FilterComponent(filters).getElement(), RenderPosition.BEFOREEND);
+render(siteMainElement, new FilterComponent(filters), RenderPosition.BEFOREEND);
 
 // Рендеринг доски
 const boardComponent = new BoardComponent();
-render(siteMainElement, boardComponent.getElement(), RenderPosition.BEFOREEND);
+render(siteMainElement, boardComponent, RenderPosition.BEFOREEND);
 
 // Получаем данные тасков
 const tasks = generateTasks(TASK_COUNT);
