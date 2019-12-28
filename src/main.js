@@ -6,7 +6,7 @@ import SiteMenuComponent from './components/site-menu';
 
 import {generateTasks} from './mock/task';
 import {generateFilters} from './mock/filter';
-import {render, replace, remove, RenderPosition} from './utils/render';
+import {render, RenderPosition} from './utils/render';
 
 const TASK_COUNT = 22;
 
