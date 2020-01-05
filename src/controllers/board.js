@@ -1,4 +1,4 @@
-import SortComponent from '../components/sort';
+import SortComponent, { SortType } from '../components/sort';
 import TaskEditComponent from '../components/task-edit';
 import TaskComponent from '../components/task';
 import TasksComponent from '../components/tasks';
@@ -98,13 +98,35 @@ export default class BoardController {
 
     // Добавляем сразу туда определённое количество
     let showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
-    tasks.slice(0, showingTasksCount)
-      .forEach((task) => {
-        renderTask(taskListElement, task);
-      });
 
-    // Отображаем кнопку Load More
-    render(container, this._loadMoreButtonComponent, RenderPosition.BEFOREEND);
+    renderTasks(taskListElement, tasks.slice(0, showingTasksCount));
+    renderLoadMoreButton();
+
+    this._sortComponent.setSortTypeChangeHanlder((sortType) => {
+      let sortedTasks = [];
+
+      switch (sortType) {
+        case SortType.DATE_UP:
+          sortedTasks = tasks.slice().sort((a, b) => a.dueDate - b.dueDate);
+          break;
+        case SortType.DATE_DOWN:
+          sortedTasks = tasks.slice().sort((a, b) => b.dueDate - a.dueDate);
+          break;
+        case SortType.DEFAULT:
+          sortedTasks = tasks.slice(0, showingTasksCount);
+          break;
+      }
+
+      taskListElement.innerHTML = ``;
+
+      renderTasks(taskListElement, sortedTasks);
+
+      if (sortType === SortType.DEFAULT) {
+        renderLoadMoreButton();
+      } else {
+        remove(this._loadMoreButtonComponent);
+      }
+    });
 
     // По нажатию на неё добавляем ещё таски
     this._loadMoreButtonComponent.setClickHandler(() => {
