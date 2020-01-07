@@ -1,4 +1,4 @@
-import SortComponent, { SortType } from '../components/sort';
+import SortComponent, {SortType} from '../components/sort';
 import TaskEditComponent from '../components/task-edit';
 import TaskComponent from '../components/task';
 import TasksComponent from '../components/tasks';
@@ -9,10 +9,12 @@ import {render, replace, remove, RenderPosition} from '../utils/render';
 const SHOWING_TASKS_COUNT_BY_BUTTON = 8;
 const SHOWING_TASKS_COUNT_ON_START = 8;
 
+// Функция рендеринга таска
 const renderTask = (taskListElement, task) => {
   const taskComponent = new TaskComponent(task);
   const taskEditComponent = new TaskEditComponent(task);
 
+  // Обработчик нажатия Esc
   const onEscKeyDown = (evt) => {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
@@ -44,6 +46,7 @@ const renderTask = (taskListElement, task) => {
   render(taskListElement, taskComponent, RenderPosition.BEFOREEND);
 };
 
+// Функция рендеринга тасков
 const renderTasks = (taskListElement, tasks) => {
   tasks.forEach((task) => {
     renderTask(taskListElement, task);
@@ -61,13 +64,18 @@ export default class BoardController {
   }
 
   render(tasks) {
+
+    // Функция рендеринга кнопки
     const renderLoadMoreButton = () => {
+      // Если кол-во тасков меньше, чем базовое кол-во для показа, то завершим функцию, и кнопка показана не будет
       if (showingTasksCount >= tasks.length) {
         return;
       }
 
+      // Отрендерим кнопку
       render(container, this._loadMoreButtonComponent, RenderPosition.BEFOREEND);
 
+      // Повесим обработчик клика на кнопку
       this._loadMoreButtonComponent.setClickHandler(() => {
         const prevTasksCount = showingTasksCount;
         showingTasksCount = showingTasksCount + SHOWING_TASKS_COUNT_BY_BUTTON;
@@ -81,7 +89,7 @@ export default class BoardController {
     };
 
     const container = this._container.getElement();
-    // Проверяем, отсутствие тасков
+    // Проверяем отсутствие тасков
     const isAllTasksArchived = tasks.every((task) => task.isArchive);
 
     // Нет тасков - покажем сообщение, есть - добавим интерфейс и покажем таски
@@ -102,7 +110,7 @@ export default class BoardController {
     renderTasks(taskListElement, tasks.slice(0, showingTasksCount));
     renderLoadMoreButton();
 
-    this._sortComponent.setSortTypeChangeHanlder((sortType) => {
+    this._sortComponent.setSortTypeChangeHandler((sortType) => {
       let sortedTasks = [];
 
       switch (sortType) {
@@ -121,6 +129,7 @@ export default class BoardController {
 
       renderTasks(taskListElement, sortedTasks);
 
+      // Если сортировка была по дефолту, то отобразим кнопку. Нет - удалим
       if (sortType === SortType.DEFAULT) {
         renderLoadMoreButton();
       } else {
