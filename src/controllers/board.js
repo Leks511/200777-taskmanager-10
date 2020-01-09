@@ -110,6 +110,8 @@ export default class BoardController {
     renderTasks(taskListElement, tasks.slice(0, showingTasksCount));
     renderLoadMoreButton();
 
+
+    // Добавим функционал сортировки по клику
     this._sortComponent.setSortTypeChangeHandler((sortType) => {
       let sortedTasks = [];
 
