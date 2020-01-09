@@ -16,12 +16,18 @@ const renderTasks = (taskListElement, tasks, onDataChange, onViewChange) => {
   return tasks.map((task) => {
     const taskController = new TaskController(taskListElement, onDataChange, onViewChange);
     taskController.render(task);
+
+    return taskController;
   });
 };
 
 export default class BoardController {
   constructor(container) {
     this._container = container;
+
+    this._tasks = [];
+    this._showedTaskControllers = [];
+    this._showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
 
     this._noTasksComponent = new NoTasksComponent();
     this._sortComponent = new SortComponent();
