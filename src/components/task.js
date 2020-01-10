@@ -1,31 +1,47 @@
-import {MONTH_NAMES} from '../const';
-import {formatTime} from '../utils/common';
-import AbstractComponent from './abstract-component';
+import AbstractComponent from './abstract-component.js';
+import {formatTime, formatDate} from '../utils/common.js';
 
 const createHashtagsMarkup = (hashtags) => {
   return hashtags
     .map((hashtag) => {
       return (
         `<span class="card__hashtag-inner">
-          <span class="card__hashtag-name">
-            #${hashtag}
-          </span>
-        </span>`
+            <span class="card__hashtag-name">
+              #${hashtag}
+            </span>
+          </span>`
       );
     })
     .join(`\n`);
 };
 
+const createButtonMarkup = (name, isActive) => {
+  return (
+    `<button
+      type="button"
+      class="card__btn card__btn--${name} ${isActive ? `` : `card__btn--disabled`}"
+    >
+      ${name}
+    </button>`
+  );
+};
+
 const createTaskTemplate = (task) => {
+  // Все работу производим заранее. Внутри шаблонной строки никаких вычислений не делаем,
+  // потому что внутри большой разметки сложно искать какой-либо код.
   const {description, tags, dueDate, color, repeatingDays} = task;
 
   const isExpired = dueDate instanceof Date && dueDate < Date.now();
   const isDateShowing = !!dueDate;
 
-  const date = isDateShowing ? `${dueDate.getDate()} ${MONTH_NAMES[dueDate.getMonth()]}` : ``;
+  const date = isDateShowing ? formatDate(dueDate) : ``;
   const time = isDateShowing ? formatTime(dueDate) : ``;
 
   const hashtags = createHashtagsMarkup(Array.from(tags));
+  const editButton = createButtonMarkup(`edit`, true);
+  const archiveButton = createButtonMarkup(`archive`, task.isArchive);
+  const favoritesButton = createButtonMarkup(`favorites`, task.isFavorite);
+
   const repeatClass = Object.values(repeatingDays).some(Boolean) ? `card--repeat` : ``;
   const deadlineClass = isExpired ? `card--deadline` : ``;
 
@@ -34,30 +50,18 @@ const createTaskTemplate = (task) => {
       <div class="card__form">
         <div class="card__inner">
           <div class="card__control">
-            <button type="button" class="card__btn card__btn--edit">
-              edit
-            </button>
-            <button type="button" class="card__btn card__btn--archive">
-              archive
-            </button>
-            <button
-              type="button"
-              class="card__btn card__btn--favorites card__btn--disabled"
-            >
-              favorites
-            </button>
+            ${editButton}
+            ${archiveButton}
+            ${favoritesButton}
           </div>
-
           <div class="card__color-bar">
             <svg class="card__color-bar-wave" width="100%" height="10">
               <use xlink:href="#wave"></use>
             </svg>
           </div>
-
           <div class="card__textarea-wrap">
             <p class="card__text">${description}</p>
           </div>
-
           <div class="card__settings">
             <div class="card__details">
               <div class="card__dates">
@@ -68,7 +72,6 @@ const createTaskTemplate = (task) => {
                   </p>
                 </div>
               </div>
-
               <div class="card__hashtag">
                 <div class="card__hashtag-list">
                   ${hashtags}
@@ -95,6 +98,16 @@ export default class Task extends AbstractComponent {
 
   setEditButtonClickHandler(handler) {
     this.getElement().querySelector(`.card__btn--edit`)
+      .addEventListener(`click`, handler);
+  }
+
+  setFavoritesButtonClickHandler(handler) {
+    this.getElement().querySelector(`.card__btn--favorites`)
+      .addEventListener(`click`, handler);
+  }
+
+  setArchiveButtonClickHandler(handler) {
+    this.getElement().querySelector(`.card__btn--archive`)
       .addEventListener(`click`, handler);
   }
 }
