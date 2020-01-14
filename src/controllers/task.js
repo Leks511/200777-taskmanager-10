@@ -10,6 +10,7 @@ const Mode = {
 
 export default class TaskController {
   constructor(container, onDataChange, onViewChange) {
+    // Container - элемент, в который будем помещать таск
     this._container = container;
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
@@ -22,7 +23,7 @@ export default class TaskController {
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
 
-
+  // Метод принимает данные одной задачи
   render(task) {
     const oldTaskComponent = this._taskComponent;
     const oldTaskEditComponent = this._taskEditComponent;
@@ -30,17 +31,20 @@ export default class TaskController {
     this._taskComponent = new TaskComponent(task);
     this._taskEditComponent = new TaskEditComponent(task);
 
+    // По нажатию на Edit поменяем таск на форму таска
     this._taskComponent.setEditButtonClickHandler(() => {
       this._replaceTaskToEdit();
       document.addEventListener(`keydown`, this._onEscKeyDown);
     });
 
+    //
     this._taskComponent.setArchiveButtonClickHandler(() => {
       this._onDataChange(this, task, Object.assign({}, task, {
         isArchive: !task.isArchive,
       }));
     });
 
+    //
     this._taskComponent.setFavoritesButtonClickHandler(() => {
       this._onDataChange(this, task, Object.assign({}, task, {
         isFavorite: !task.isFavorite,

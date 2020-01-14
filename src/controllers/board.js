@@ -14,6 +14,7 @@ const SHOWING_TASKS_COUNT_ON_START = 8;
 // Функция рендеринга тасков
 const renderTasks = (taskListElement, tasks, onDataChange, onViewChange) => {
   return tasks.map((task) => {
+    // На каждый таск создаём контроллер и вызываем его метод рендер
     const taskController = new TaskController(taskListElement, onDataChange, onViewChange);
     taskController.render(task);
 

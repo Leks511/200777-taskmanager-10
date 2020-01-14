@@ -27,7 +27,7 @@ const createButtonMarkup = (name, isActive) => {
 };
 
 const createTaskTemplate = (task) => {
-  // Все работу производим заранее. Внутри шаблонной строки никаких вычислений не делаем,
+  // Всю работу производим заранее. Внутри шаблонной строки никаких вычислений не делаем,
   // потому что внутри большой разметки сложно искать какой-либо код.
   const {description, tags, dueDate, color, repeatingDays} = task;
 
@@ -96,16 +96,19 @@ export default class Task extends AbstractComponent {
     return createTaskTemplate(this._task);
   }
 
+  // Обработчик нажатия на кнопку Edit
   setEditButtonClickHandler(handler) {
     this.getElement().querySelector(`.card__btn--edit`)
       .addEventListener(`click`, handler);
   }
 
+  // Обработчик нажатия на кнопку Favorites
   setFavoritesButtonClickHandler(handler) {
     this.getElement().querySelector(`.card__btn--favorites`)
       .addEventListener(`click`, handler);
   }
 
+  // Обработчик нажатия на кнопку Archive
   setArchiveButtonClickHandler(handler) {
     this.getElement().querySelector(`.card__btn--archive`)
       .addEventListener(`click`, handler);
