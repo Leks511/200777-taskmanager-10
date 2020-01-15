@@ -31,13 +31,15 @@ export default class TaskController {
     this._taskComponent = new TaskComponent(task);
     this._taskEditComponent = new TaskEditComponent(task);
 
+    // В методы, описанные во View кладём обработчики
+
     // По нажатию на Edit поменяем таск на форму таска
     this._taskComponent.setEditButtonClickHandler(() => {
       this._replaceTaskToEdit();
       document.addEventListener(`keydown`, this._onEscKeyDown);
     });
 
-    //
+    // По нажатию на Archieve поменяем значение на противоположное
     this._taskComponent.setArchiveButtonClickHandler(() => {
       this._onDataChange(this, task, Object.assign({}, task, {
         isArchive: !task.isArchive,
@@ -54,7 +56,7 @@ export default class TaskController {
     this._taskEditComponent.setSubmitHandler(() => this._replaceEditToTask());
 
     if (oldTaskEditComponent && oldTaskComponent) {
-      replace(this.this._taskComponent, oldTaskComponent);
+      replace(this._taskComponent, oldTaskComponent);
       replace(this._taskEditComponent, oldTaskEditComponent);
     } else {
       render(this._container, this._taskComponent, RenderPosition.BEFOREEND);
