@@ -17,6 +17,8 @@ export default class TaskController {
 
     this._mode = Mode.DEFAULT;
 
+    // Создаём компоненты, которые потом будем наполнять из рендера и использовать
+    // Пока - заглушки
     this._taskComponent = null;
     this._taskEditComponent = null;
 
