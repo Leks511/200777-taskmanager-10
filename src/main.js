@@ -31,3 +31,10 @@ const tasks = generateTasks(TASK_COUNT);
 const boardController = new BoardController(boardComponent);
 
 boardController.render(tasks);
+
+/*
+Курс завален, но задания для дальнейшего выполнения лучше открыть
+
+Модуль 7 - таск 1
+
+*/
